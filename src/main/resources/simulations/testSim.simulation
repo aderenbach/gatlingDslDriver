@@ -1,0 +1,6 @@
+Simulation: a test simulation
+BaseURL: http://localhost
+Scenarios:
+    testScen with 20 users at once
+    testScen2 with 20 users over 20 seconds
+

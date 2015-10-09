@@ -1,0 +1,3 @@
+Scenario: call the server
+
+User calls GET /
