@@ -1,6 +1,7 @@
 package de.aderenbach.gatlingdsl
 
 import de.aderenbach.gatlingdsl.parser.DslParser
+import de.aderenbach.gatlingdsl.parser.simpledsl.SimpleDslSimlationBuilder
 
 import scala.io.Source
 
@@ -13,9 +14,9 @@ object LoadTestRunner {
 
     val dslSource = Source.fromFile("")
 
-    val parser = new DslParser(dslSource)
+    //val parser = new DslParser(dslSource)
 
-    LoadScenarioConfig.builder = LoadScenarioBuilder(null)
+    GenericSimulationConfig.builder = SimpleDslSimlationBuilder(null)
     Engine.runSimulation("desc", "de.mnet.portal.gatling.LoadSimulation")
   }
 

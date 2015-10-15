@@ -1,10 +1,12 @@
 import scala.io.Source
 
-object test {
+object simulationLoadingTest {
+
   class Simulation(name: String, baseUrl: String,scnConfig:List[ScenarioConfig])
   class RampUp(rampUp:String)
   class ScenarioConfig(scn: Scenario, userCount: Int, rampUp: RampUp)
   class Scenario(name: String)
+
   val dsl = """Simulation: a test simulation
     BaseURL: http://localhost
     Scenarios:
@@ -30,6 +32,7 @@ object test {
   val simConfigMap =  simConfig toMap
 
   val scnList = for ((id,name) <- scenarios) yield name
+
   val scnTuples = for (scn <- scnList) yield {
     println(scn)
     scn match {
@@ -38,5 +41,12 @@ object test {
       case _ => throw new RuntimeException("Can't part simulation")
     }
   }
-  new Simulation(simConfigMap("Name"),simConfigMap("BaseURL"), scnTuples.toList)
+
+  val sim = new Simulation(simConfigMap("Name"),simConfigMap("BaseURL"), scnTuples.toList)
+
+
+
+
+
+
 }

@@ -1,18 +1,14 @@
 package de.aderenbach.gatlingdsl.parser
 
+import java.net.URI
+
 import scala.io.BufferedSource
 
 /**
  * Created by Alexander Derenbach <alexander.derenbach@gmail.com> on 09.10.15.
  */
-class DslParser(dslSource: BufferedSource) {
+trait DslParser {
 
-      for (line <- dslSource.getLines()) yield {
-        line match {
-          case "Simulation: " :: simulationName => "sim"
-          case "BaseUrl: " :: baseUrl => "base"
-        }
-      }
-
+    def parse:Simulation
 
 }
