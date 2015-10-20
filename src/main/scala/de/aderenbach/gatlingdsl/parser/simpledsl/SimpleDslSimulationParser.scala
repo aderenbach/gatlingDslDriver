@@ -17,7 +17,7 @@ object SimpleDslSimulationParser extends SimulationParser {
     def r = new util.matching.Regex(sc.parts.mkString, sc.parts.tail.map(_ => "x"): _*)
   }
 
-  override def parse(sourceLocationURI: String, sourceName: String): Simulation = {
+  override def parse( sourceName: String,sourceLocationURI: String): Simulation = {
     val source = Source.fromFile(new File(sourceLocationURI +"/" + sourceName + ".simulation"))
     val (simConfig, scenarios) = (for (line <- source.getLines()) yield {
       line match {

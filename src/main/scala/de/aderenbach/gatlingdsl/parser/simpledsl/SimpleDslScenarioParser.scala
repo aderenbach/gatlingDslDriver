@@ -17,18 +17,23 @@ object SimpleDslScenarioParser extends ScenarioParser {
   }
 
   override def parse(sourceLocationURI: String, sourceName: String): Scenario = {
-    val source = Source.fromFile(new File(sourceLocationURI +"/" + sourceName + ".scenario"))
-    val (scenarioProperties,actions) = (for (line <- source.getLines()) yield {
-      line match {
-        case r"\s*Scenario: (.*)$name" => "Name" -> name
-        case r"\s*" => null
-        case _ => "Action" -> line.trim
+    val source = Source.fromFile(new File(sourceLocationURI + "/" + sourceName + ".scenario"))
+
+    val result = for (line <- source.getLines())
+      yield {
+        line match {
+          case r"\s*Scenario: (.*)$name" => "Name" -> name
+          case r"\s*" => null
+          case _ => "Action" -> line.trim
+        }
       }
-    }) filter (e => e != null) partition(e => e._1 != "Actions")
 
-    val scenarioPropertyMap =  scenarioProperties toMap
+    val resultWithoutNull = result filter (e => e != null)
 
-    new Scenario(scenarioPropertyMap("Name"),actions map (e=> e._2) toList)
+    val (scenarioProperties, actions) = resultWithoutNull partition (e => e._1 != "Action")
+    val scenarioPropertyMap = scenarioProperties toMap
+
+    new Scenario(scenarioPropertyMap("Name"), actions map (e => e._2) toList)
 
   }
 }

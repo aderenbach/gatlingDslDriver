@@ -20,14 +20,13 @@ case class SimpleDslSimlationBuilder(dslparser: DslParser) {
     def r = new util.matching.Regex(sc.parts.mkString, sc.parts.tail.map(_ => "x"): _*)
   }
 
-  // TODO extract to object to make testable??
   def addHttpMethod(method: String, path: String): HttpRequestBuilder = {
     method match {
       case "GET" => http(path).get(path)
       case "DELETE" => http(path).delete(path)
       case "PUT" => http(path).put(path)
       case "POST" => http(path).post(path)
-      case _ => ???
+      case _ => throw new Error("method unkown " + method)
     }
   }
 

@@ -1,9 +1,13 @@
 import java.io.File
 import de.aderenbach.gatlingdsl.parser.simpledsl.{SimpleDslSimlationBuilder, SimpleDslParser}
-object SimpleDslParserTest {
-  // val sim = new SimpleDslParser("/Users/kinggrass/Sources/gatling_dsl/gatling_dsl_driver/src/main/resources/simulations","testSim")
-  //sim.parse
+import io.gatling.http.Predef._
+import io.gatling.core.Predef._
+import io.gatling.http.request.builder.HttpRequestBuilder
 
-  SimpleDslSimlationBuilder(null).addHttpMethod("GET","path")
+object SimpleDslParserTest {
+ // http("test").get("/test")
+  //val sim = new SimpleDslParser("/Users/kinggrass/Sources/gatling_dsl/gatling_dsl_driver/src/main/resources/simulations","testSim")
+  //SimpleDslSimlationBuilder(sim).addHttpMethod("GET","/test")
+
 
 }

@@ -1,7 +1,7 @@
 package de.aderenbach.gatlingdsl
 
 import de.aderenbach.gatlingdsl.parser.DslParser
-import de.aderenbach.gatlingdsl.parser.simpledsl.SimpleDslSimlationBuilder
+import de.aderenbach.gatlingdsl.parser.simpledsl.{SimpleDslParser, SimpleDslSimlationBuilder}
 
 import scala.io.Source
 
@@ -12,12 +12,10 @@ object LoadTestRunner {
 
   def main(args: scala.Array[scala.Predef.String]): scala.Unit = {
 
-    val dslSource = Source.fromFile("")
+    val parser = new SimpleDslParser("/Users/kinggrass/Sources/gatling_dsl/gatling_dsl_driver/src/main/resources/simulations","testSim")
 
-    //val parser = new DslParser(dslSource)
-
-    GenericSimulationConfig.builder = SimpleDslSimlationBuilder(null)
-    Engine.runSimulation("desc", "de.mnet.portal.gatling.LoadSimulation")
+    GenericSimulationConfig.builder = SimpleDslSimlationBuilder(parser)
+    Engine.runSimulation("desc", "de.aderenbach.gatlingdsl.GenericSimulation")
   }
 
 }
