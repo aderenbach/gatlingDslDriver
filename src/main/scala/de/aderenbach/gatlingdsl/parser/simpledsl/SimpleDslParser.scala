@@ -9,8 +9,8 @@ import scala.io.Source
 /**
  * Created by Alexander Derenbach <alexander.derenbach@gmail.com> on 12.10.15.
  */
-class SimpleDslParser(simLocation: String, simulationName: String ) extends DslParser {
+class SimpleDslParser(simulationName: String ) extends DslParser {
   override def parse: Simulation = {
-    SimpleDslSimulationParser.parse(simulationName,simLocation)
+    SimpleDslSimulationParser.parse(simulationName)
   }
 }

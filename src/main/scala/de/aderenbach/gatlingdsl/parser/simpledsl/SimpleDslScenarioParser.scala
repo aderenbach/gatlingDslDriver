@@ -12,20 +12,12 @@ import scala.io.{Source, BufferedSource}
  */
 object SimpleDslScenarioParser extends ScenarioParser {
 
-  implicit class Regex(sc: StringContext) {
-    def r = new util.matching.Regex(sc.parts.mkString, sc.parts.tail.map(_ => "x"): _*)
-  }
-
-  override def parse(sourceLocationURI: String, sourceName: String): Scenario = {
-    val source = Source.fromFile(new File(sourceLocationURI + "/" + sourceName + ".scenario"))
+  override def parse(sourceName: String): Scenario = {
+    val source = SourceLoader.getSource(sourceName + ".scenario")
 
     val result = for (line <- source.getLines())
       yield {
-        line match {
-          case r"\s*Scenario: (.*)$name" => "Name" -> name
-          case r"\s*" => null
-          case _ => "Action" -> line.trim
-        }
+        SimpleDsl.scenario(line)
       }
 
     val resultWithoutNull = result filter (e => e != null)

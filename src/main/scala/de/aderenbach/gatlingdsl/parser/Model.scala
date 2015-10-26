@@ -8,7 +8,14 @@ class Simulation(val name: String,val baseUrl: String,val scenarioConfigList:Lis
 
 }
 
-class RampUp(rampUp:String)
+class RampUp(val rampUp:String) {
+}
+
+object RampUp {
+  def atOnce() = new RampUp("AT_ONCE")
+
+
+}
 
 class ScenarioConfig(val scenario: Scenario, val userCount: Int, val rampUp: RampUp) {
   override def toString = scenario.toString
