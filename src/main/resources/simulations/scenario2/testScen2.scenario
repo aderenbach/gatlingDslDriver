@@ -1,12 +1,12 @@
 Scenario: call the server 2
 
-Call GET /test?test=234
+Call GET /test?test=234 => is:200,is_not:201
 #Pause 1 second
 #Pause 2 seconds
 #Pause 1 second - 10 seconds
 #Pause 1 minute - 3 minutes
 #Call POST /test Form: test=murx,blub=blah,foo=bar
-Call POST / Formdata: formdata1
+Call POST / Formdata: formdata1 => is:200
 #Pause 2 - 5
 Call DELETE /
 Call PUT /testPut blahbulbblubbullscllsslcls

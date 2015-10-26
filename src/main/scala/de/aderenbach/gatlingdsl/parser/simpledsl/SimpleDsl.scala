@@ -3,6 +3,7 @@ package de.aderenbach.gatlingdsl.parser.simpledsl
 import io.gatling.core.Predef._
 import io.gatling.core.structure.ScenarioBuilder
 import io.gatling.http.Predef._
+import io.gatling.http.check.HttpCheck
 import io.gatling.http.request.builder.HttpRequestBuilder
 
 /**
@@ -42,11 +43,18 @@ object SimpleDsl extends scala.AnyRef {
     }
   }
 
+  def splitCheck(action: String) = {
+    action.split("=>") match {
+      case Array(x,y) => (x.trim,y.trim)
+      case Array(x) => (x.trim,null)
+    }
+  }
 
   def call(scnBuilder: ScenarioBuilder, action: String): ScenarioBuilder = {
-    action match {
-      case r"\s*Call (.*?)$method\s(.*?)$path\s(.*?)$body" => scnBuilder.exec(addHttpMethod(method, path, body))
-      case r"\s*Call (.*?)$method\s(.*?)$path" => scnBuilder.exec(addHttpMethod(method, path, null))
+    val (_call,_check) = splitCheck(action)
+    _call match {
+      case r"\s*Call (.*?)$method\s(.*?)$path\s(.*?)$body" => scnBuilder.exec(addHttpMethod(method, path, body)(_check))
+      case r"\s*Call (.*?)$method\s(.*?)$path" => scnBuilder.exec(addHttpMethod(method, path, null)(_check))
       case _ => throw new Error("unknown call: '" + action + "'")
     }
   }
@@ -80,13 +88,32 @@ object SimpleDsl extends scala.AnyRef {
     }
   }
 
-  def addHttpMethod(method: String, path: String, body: String): HttpRequestBuilder = {
-    method match {
+  def parseCheck(check: String): HttpCheck = {
+    check match {
+      case r"is:(\d*)$httpStatus" => status.is(httpStatus.toInt)
+      case r"is_not:(\d*)$httpStatus" => status.not(httpStatus.toInt)
+    }
+  }
+
+  def doCheck(check: List[String]): List[HttpCheck] = {
+    check match {
+      case Nil => Nil
+      case x :: xs => parseCheck(x) :: doCheck(xs)
+    }
+  }
+
+  def addHttpMethod(method: String, path: String, body: String)(check: String): HttpRequestBuilder = {
+    val httpBuilder = method match {
       case "GET" => http(path).get(path)
       case "DELETE" => http(path).delete(path)
       case "PUT" => addBodyOrFormData(http(path).put(path), body)
       case "POST" => addBodyOrFormData(http(path).post(path), body)
       case _ => throw new Error("method unkown: " + method)
+    }
+    check match {
+      case null => httpBuilder
+        // TODO change to List to allow recursive call
+      case _ => httpBuilder.check(doCheck(check.split(",").toList) : _*)
     }
   }
 
